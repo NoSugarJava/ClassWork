@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CET-6</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    header,
+    section {
+      text-align: center;
+      background-color: red;
+    }
+
+    footer {
+      text-align: center;
+      background-color: #4EFBF5FF;
+    }
+
+    button {
+      font-size: 36px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>CET-6</h1>
+  </header>
+
+  <section>
+    <button id="loadCet">读取单词</button>
+    <button id="randWord">输出单词</button>
+    <p>使用说明：请先读取单词，再输出单词</p>
+  </section>
+
+  <footer>
+    <p id='en'></p>
+    <p id='pr'></p>
+    <p id='zh'></p>
+  </footer>
+
+  <script>
+    let lines = ""
+    let line = ""
+    const loadCet = document.querySelector("#loadCet")
+    const randWord = document.querySelector('#randWord')
+
+    /*
+    点击读取后将cet6.txt中的单词读进数组
+    */
+    loadCet.addEventListener('click', function () {
+      fetch('cet6.txt')
+        .then(Response => {
+          if (!Response.ok) {
+            throw new Error("读取失败")
+          }
+          return Response.text()
+        })
+        .then(text => {
+          lines = text
+          // console.log(lines)
+        })
+    })
+
+    /*
+    点击输出后通过split进行每个单词的切割，在用slice进行细分，替换页面的单词
+    */
+    randWord.addEventListener('click', function () {
+      if (lines.length === 0) {
+        alert('请先阅读使用说明！！！')
+      }
+      else {
+        line = lines.split('\r\n')
+        let str = line[Math.floor(Math.random() * line.length)]
+        // console.log(str)
+        let begin = str.indexOf('\t')
+        let middle = str.lastIndexOf('\t')
+        let end = str.indexOf('\n')
+        let en = str.slice(0, begin)
+        let pr = str.slice(begin + 1, middle)
+        let zh = str.slice(middle + 1, end)
+        document.querySelector('#en').innerHTML = en
+        document.querySelector('#pr').innerHTML = pr
+        document.querySelector('#zh').innerHTML = zh
+      }
+    })
+  </script>
+</body>
+
+</html>
