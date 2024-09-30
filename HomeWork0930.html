@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CET-6</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      height: 100vh;
+      background-color: #4EFBF5FF;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    button {
+      margin-right: 10px;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    #word-display {
+      margin-top: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>CET-6 Word Reader</h1>
+  <div>
+    <button id="first-word">读取第一个单词</button>
+    <button id="next-word">读取下一个单词</button>
+    <button id="random-word">随机读取单词</button>
+    <button id="last-word">读取最后一个单词</button>
+  </div>
+  <div id="word-display">单词将显示在这里</div>
+
+  <script>
+    let words = [];
+    let currentIndex = 0;
+
+    // 从 cet6.txt 文件中读取所有单词
+    fetch('cet6.txt')
+      .then(response => response.text())
+      .then(text => {
+        // 按行分割文本，并去掉空行
+        words = text.split('\n').filter(word => word.trim() !== '');
+        console.log('单词已加载:', words);
+      })
+      .catch(error => console.error('读取文件时出错:', error));
+
+    // 读取第一个单词
+    document.getElementById('first-word').addEventListener('click', () => {
+      if (words.length > 0) {
+        currentIndex = 0;
+        displayWord(words[0]);
+      } else {
+        displayError();
+      }
+    });
+
+    // 读取下一个单词
+    document.getElementById('next-word').addEventListener('click', () => {
+      if (words.length > 0) {
+        currentIndex = (currentIndex + 1) % words.length;  // 循环到列表开头
+        displayWord(words[currentIndex]);
+      } else {
+        displayError();
+      }
+    });
+
+    // 随机读取单词
+    document.getElementById('random-word').addEventListener('click', () => {
+      if (words.length > 0) {
+        const randomIndex = Math.floor(Math.random() * words.length);
+        displayWord(words[randomIndex]);
+      } else {
+        displayError();
+      }
+    });
+
+    // 读取最后一个单词
+    document.getElementById('last-word').addEventListener('click', () => {
+      if (words.length > 0) {
+        currentIndex = words.length - 1;
+        displayWord(words[currentIndex]);
+      } else {
+        displayError();
+      }
+    });
+
+    // 显示单词
+    function displayWord(word) {
+      document.getElementById('word-display').innerText = word;
+    }
+
+    // 显示错误信息
+    function displayError() {
+      document.getElementById('word-display').innerText = '无法加载单词列表，请检查文件。';
+    }
+
+  </script>
+</body>
+
+</html>
