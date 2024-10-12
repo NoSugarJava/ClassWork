@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CET-6</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      height: 100vh;
+      background-color: #4EFBF5FF;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    button {
+      margin-right: 10px;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    #word-display {
+      margin-top: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>CET-6 Word Reader</h1>
+  <div>
+    <button id="first-word">读取第一个单词</button>
+    <button id="next-word">读取下一个单词</button>
+    <button id="random-word">随机读取单词</button>
+    <button id="last-word">读取最后一个单词</button>
+  </div>
+  <div id="word-display">单词将显示在这里</div>
+
+  <script>
+    const WordReader = {
+      words: [],
+      currentIndex: 0,
+
+      loadWords: function() {
+        fetch('cet6.txt')
+          .then(response => response.text())
+          .then(text => {
+            this.words = text.split('\n').filter(word => word.trim() !== '');
+            console.log('单词已加载:', this.words);
+          })
+          .catch(error => console.error('读取文件时出错:', error));
+      },
+
+      getFirstWord: function() {
+        if (this.words.length > 0) {
+          this.currentIndex = 0;
+          this.displayWord(this.words[0]);
+        } else {
+          this.displayError();
+        }
+      },
+
+      getNextWord: function() {
+        if (this.words.length > 0) {
+          this.currentIndex = (this.currentIndex + 1) % this.words.length;
+          this.displayWord(this.words[this.currentIndex]);
+        } else {
+          this.displayError();
+        }
+      },
+
+      getRandomWord: function() {
+        if (this.words.length > 0) {
+          const randomIndex = Math.floor(Math.random() * this.words.length);
+          this.displayWord(this.words[randomIndex]);
+        } else {
+          this.displayError();
+        }
+      },
+
+      getLastWord: function() {
+        if (this.words.length > 0) {
+          this.currentIndex = this.words.length - 1;
+          this.displayWord(this.words[this.currentIndex]);
+        } else {
+          this.displayError();
+        }
+      },
+
+      displayWord: function(word) {
+        document.getElementById('word-display').innerText = word;
+      },
+
+      displayError: function() {
+        document.getElementById('word-display').innerText = '无法加载单词列表，请检查文件。';
+      }
+    };
+
+    // Load words when the page is ready
+    WordReader.loadWords();
+
+    // Event listeners for buttons
+    document.getElementById('first-word').addEventListener('click', () => WordReader.getFirstWord());
+    document.getElementById('next-word').addEventListener('click', () => WordReader.getNextWord());
+    document.getElementById('random-word').addEventListener('click', () => WordReader.getRandomWord());
+    document.getElementById('last-word').addEventListener('click', () => WordReader.getLastWord());
+  </script>
+</body>
+
+</html>
