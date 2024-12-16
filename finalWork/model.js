@@ -34,7 +34,7 @@ for(let i=0;i<cetArr.length;i++){
 let cet6String = "a	/ei/	art.一(个);每一(个);(同类事物中)任一个\r\nabandon	/ə'bændən/	vt.离弃,丢弃;遗弃,抛弃;放弃\r\nabdomen	/æb'dəumen/	n.腹,下腹(胸部到腿部的部分)" ;
 createCET6(cet6String) ;
 //远程异步读取三个大型单词文本
-fetch('cet/cet1.txt') //读取cet/cet1.txt
+fetch("cet/cet1.txt") //读取cet/cet1.txt
 .then(resp => resp.text())
 .then(txt => {
   Model.CET6 = [] ;
@@ -42,7 +42,7 @@ fetch('cet/cet1.txt') //读取cet/cet1.txt
   UI.footerLog('系统成功读取了'+ Model.CET6.length +'个单词！') ;
 }) ;
 setTimeout(function(){ //读取cet/cet2.txt
-  fetch('cet/cet2.txt') //读取cet/cet2.txt
+  fetch("cet/cet2.txt") //读取cet/cet2.txt
   .then(resp => resp.text())
   .then(txt => {
    createCET6(txt) ;
@@ -50,7 +50,7 @@ setTimeout(function(){ //读取cet/cet2.txt
 }) ;
 } , 2 * 1000); 
 setTimeout(function(){
-  fetch('cet/cet3.txt')
+  fetch("cet/cet3.txt")
   .then(res => res.text())
   .then(txt => {
       createCET6(txt) ;
